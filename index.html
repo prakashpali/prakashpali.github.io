@@ -1,6 +1,143 @@
-<html>
-  <head><meta name="google-site-verification" content="4DlfvgCFfSNN_VpDVQx-isnRSV1AK2o6XVFFNf9Tuo8" /></head>
-  <body>
-    Hello World
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="4DlfvgCFfSNN_VpDVQx-isnRSV1AK2o6XVFFNf9Tuo8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table of Contents Example</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            margin: 0;
+        }
+
+        nav {
+            width: 250px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-right: 1px solid #ccc;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav li a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+        }
+
+        nav li a:hover {
+            background-color: #ddd;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        section {
+            display: none; /* Initially hide all sections */
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .section-content {
+            display: none; /* Initially hide all section content */
+        }
+
+        #home {
+            display: block; /* Show home by default */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a data-target="home">Home</a></li>
+            <li><a data-target="section1">Section 1</a></li>
+            <li><a data-target="section2">Section 2</a></li>
+            <li><a data-target="section3">Section 3</a></li>
+            <li><a data-target="section4">Section 4</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="home">
+            <h2>Home</h2>
+            <p>Welcome to the home page! This is the default content.</p>
+        </section>
+
+        <section id="section1">
+            <h2>Section 1</h2>
+            <div class="section-content">
+                <p>This is the content of section 1. Lorem ipsum dolor sit amet...</p>
+            </div>
+        </section>
+
+        <section id="section2">
+            <h2>Section 2</h2>
+            <div class="section-content">
+                <p>This is the content of section 2. Duis aute irure dolor...</p>
+            </div>
+        </section>
+
+        <section id="section3">
+            <h2>Section 3</h2>
+            <div class="section-content">
+                <p>This is the content of section 3. Consectetur adipiscing elit...</p>
+            </div>
+        </section>
+
+        <section id="section4">
+            <h2>Section 4</h2>
+            <div class="section-content">
+                <p>This is the content of section 4. Duis aute irure dolor...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const navLinks = document.querySelectorAll('nav a');
+        const sections = document.querySelectorAll('section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const targetId = event.target.dataset.target;
+
+                sections.forEach(section => {
+                    if (section.id === targetId) {
+                        section.style.display = 'block'; // Show the clicked section
+                        const content = section.querySelector('.section-content');
+                        if (content) {
+                            content.style.display = content.style.display === 'block' ? 'none' : 'block'; // Toggle content
+                        }
+                    } else {
+                        section.style.display = 'none'; // Hide other sections
+                        const content = section.querySelector('.section-content');
+                        if (content) {
+                            content.style.display = 'none'; // Hide content of other sections
+                        }
+                    }
+                });
+            });
+        });
+
+
+    </script>
+
+</body>
 </html>
