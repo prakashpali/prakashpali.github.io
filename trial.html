@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table of Contents with Indentation</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            margin: 0;
+        }
+
+        nav {
+            width: 250px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin-left: 0; /* Reset default margin */
+        }
+
+        nav li a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+        }
+
+        nav li a:hover {
+            background-color: #ddd;
+        }
+
+        nav ul ul {  /* Style for nested lists (indentation) */
+            margin-left: 20px; /* Indent nested lists */
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Style for different heading levels (optional) */
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; margin-top: 1em;}
+        h3 { font-size: 1.2em; margin-top: 0.75em;}
+        h4 { font-size: 1em; margin-top: 0.5em;}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h2>Table of Contents</h2>
+        <ul id="toc">
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Main Heading of the Page</h1>
+
+        <section>
+            <h2>Section 1</h2>
+            <p>Content of section 1...</p>
+            <h3>Subsection 1.1</h3>
+            <p>More content...</p>
+            <h4>Sub-subsection 1.1.1</h4>
+            <p>Even more content...</p>
+            <h3>Subsection 1.2</h3>
+            <p>Content of subsection 1.2...</p>
+        </section>
+
+        <section>
+            <h2>Section 2</h2>
+            <p>Content of section 2...</p>
+            <h3>Subsection 2.1</h3>
+            <p>More content for subsection 2.1</p>
+        </section>
+
+    </main>
+
+    <script>
+        const toc = document.getElementById('toc');
+        const headings = document.querySelectorAll('main h1, main h2, main h3, main h4');
+
+        function generateTOC(headings, level = 1) {
+          const ul = document.createElement('ul');
+
+          headings.forEach(heading => {
+            if (heading.tagName === `H${level}`) {
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              const id = heading.id || `heading-${Math.random().toString(36).substring(2, 15)}`;
+              heading.id = id;
+
+              a.href = `#${id}`;
+              a.textContent = heading.textContent;
+              li.appendChild(a);
+              ul.appendChild(li);
+            } else if (heading.tagName === `H${level + 1}`) {
+              const subHeadings = [];
+              let nextSibling = heading;
+
+              while (nextSibling && nextSibling.tagName !== `H${level}`) {
+                subHeadings.push(nextSibling);
+                nextSibling = nextSibling.nextElementSibling;
+              }
+
+              const subUl = generateTOC(subHeadings, level + 1);
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              const id = heading.id || `heading-${Math.random().toString(36).substring(2, 15)}`;
+              heading.id = id;
+
+              a.href = `#${id}`;
+              a.textContent = heading.textContent;
+              li.appendChild(a);
+              li.appendChild(subUl);
+              ul.appendChild(li);
+            }
+          });
+
+          return ul;
+        }
+
+        toc.appendChild(generateTOC(headings));
+
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
